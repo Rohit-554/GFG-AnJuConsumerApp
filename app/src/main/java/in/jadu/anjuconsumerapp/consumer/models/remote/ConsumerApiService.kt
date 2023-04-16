@@ -13,7 +13,7 @@ import retrofit2.http.Path
 
 interface ConsumerApiService {
     companion object{
-        const val BASE_URL = "http://192.168.1.3:5000/"
+        const val BASE_URL = "http://34.131.137.247"
     }
 
     @POST("api/user/auth")
