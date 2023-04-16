@@ -62,7 +62,7 @@
     <string name="wallet_password">वॉलेट पासवर्ड</string>
     <string name="acc_address">खाता पता</string>
     <string name="copy_address">पता कॉपी करें और वॉलेट चेकआउट करे</string>
-    <string name="enter_wallet_address">अपना वॉलेट पता दर्ज करें</string>
+    <string name="enter_wallet_address">वॉलेट पता दर्ज करें</string>
     <string name="send_fund">धन भेजें</string>
     <string name="enter_amount">अपना धन दर्ज करें</string>
     <string name="total_eths_required">"कुल ETHS"</string>
