@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/consumer_nav_graph"
+    app:startDestination="@id/selectLanguageFragment">
+
+    <fragment
+        android:id="@+id/consumerHomeFragment"
+        android:name="in.jadu.anjuconsumerapp.consumer.ui.fragments.ConsumerHomeFragment"
+        android:label="fragment_consumer_home"
+        tools:layout="@layout/fragment_consumer_home" >
+        <action
+            android:id="@+id/action_consumerHomeFragment_to_walletFragment"
+            app:destination="@id/walletFragment" />
+        <action
+            android:id="@+id/action_consumerHomeFragment_to_consumerPreviewPaymentFragment"
+            app:destination="@id/consumerPreviewPaymentFragment" />
+        <action
+            android:id="@+id/action_consumerHomeFragment_to_selectLanguageFragment"
+            app:destination="@id/selectLanguageFragment"
+            app:popUpTo="@id/selectLanguageFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/consumerPreviewPaymentFragment"
+        android:name="in.jadu.anjuconsumerapp.consumer.ui.fragments.ConsumerPreviewPaymentFragment"
+        android:label="fragment_consumer_preview_payment"
+        tools:layout="@layout/fragment_consumer_preview_payment" >
+        <action
+            android:id="@+id/action_consumerPreviewPaymentFragment_to_walletFragment"
+            app:destination="@id/walletFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/consumerCartFragment"
+        android:name="in.jadu.anjuconsumerapp.consumer.ui.fragments.ConsumerCartFragment"
+        android:label="fragment_consumer_cart"
+        tools:layout="@layout/fragment_consumer_cart" />
+    <fragment
+        android:id="@+id/consumerTrackOrderFragment"
+        android:name="in.jadu.anjuconsumerapp.consumer.ui.fragments.ConsumerTrackOrderFragment"
+        android:label="fragment_consumer_track_order"
+        tools:layout="@layout/fragment_consumer_track_order" >
+        <action
+            android:id="@+id/action_consumerTrackOrderFragment_to_selectLanguageFragment"
+            app:destination="@id/selectLanguageFragment"
+            app:popUpTo="@id/consumerHomeFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/selectLanguageFragment"
+        android:name="in.jadu.anjuconsumerapp.consumer.commonuis.SelectLanguageFragment"
+        android:label="SelectLanguageFragment" >
+        <action
+            android:id="@+id/action_selectLanguageFragment_to_phoneVerificationFragment"
+            app:destination="@id/phoneVerificationFragment" />
+        <action
+            android:id="@+id/action_selectLanguageFragment_to_consumerHomeFragment"
+            app:destination="@id/consumerHomeFragment"
+            app:popUpTo="@id/selectLanguageFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/phoneVerificationFragment"
+        android:name="in.jadu.anjuconsumerapp.consumer.commonuis.PhoneVerificationFragment"
+        android:label="PhoneVerificationFragment" >
+        <action
+            android:id="@+id/action_phoneVerificationFragment_to_confirmOtpFragment"
+            app:destination="@id/confirmOtpFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/confirmOtpFragment"
+        android:name="in.jadu.anjuconsumerapp.consumer.commonuis.ConfirmOtpFragment"
+        android:label="ConfirmOtpFragment" >
+        <action
+            android:id="@+id/action_confirmOtpFragment_to_consumerHomeFragment"
+            app:destination="@id/consumerHomeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/walletFragment"
+        android:name="in.jadu.anjuconsumerapp.consumer.ui.fragments.WalletFragment"
+        android:label="WalletFragment" >
+        <action
+            android:id="@+id/action_walletFragment_to_walletConnectFragment"
+            app:destination="@id/walletConnectFragment" />
+        <action
+            android:id="@+id/action_walletFragment_to_confirmPaymentFragment"
+            app:destination="@id/confirmPaymentFragment"
+            app:popUpTo="@id/consumerHomeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/walletConnectFragment"
+        android:name="in.jadu.anjuconsumerapp.consumer.ui.fragments.WalletConnectFragment"
+        android:label="WalletConnectFragment" >
+        <action
+            android:id="@+id/action_walletConnectFragment_to_walletFragment"
+            app:destination="@id/walletFragment"
+            app:popUpTo="@id/walletConnectFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/confirmPaymentFragment"
+        android:name="in.jadu.anjuconsumerapp.consumer.ui.fragments.ConfirmPaymentFragment"
+        android:label="ConfirmPaymentFragment" >
+        <action
+            android:id="@+id/action_confirmPaymentFragment_to_consumerTrackOrderFragment"
+            app:destination="@id/consumerTrackOrderFragment"
+            app:popUpTo="@id/confirmPaymentFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+</navigation>
