@@ -18,6 +18,7 @@ import `in`.jadu.anjuconsumerapp.consumer.models.dtos.CartTypeDtoItem
 import `in`.jadu.anjuconsumerapp.consumer.viewmodels.ConsumerCartViewModel
 import `in`.jadu.anjuconsumerapp.databinding.FragmentConsumerPreviewPaymentBinding
 import java.math.BigDecimal
+import java.math.RoundingMode
 
 @AndroidEntryPoint
 class ConsumerPreviewPaymentFragment : Fragment() {
@@ -85,13 +86,15 @@ class ConsumerPreviewPaymentFragment : Fragment() {
     }
 
     fun calculateEth(finalCartPrice: Double) {
-        val ethPrice = 171666.03
-        val ethAmountForEach = 1/ethPrice
-        val ethAmount = ethAmountForEach * finalCartPrice
-        val newAmount = ethAmount.toDouble()
-        val formatted = "%.5f".format(BigDecimal(newAmount).setScale(3, BigDecimal.ROUND_DOWN))
-        binding.tvEthsRequiredValue.text = "$formatted ETH"
-        bundle.putString("ethAmount", formatted)
+
+        val ethPrice = BigDecimal("171666.03")
+        val ethAmountForEach = BigDecimal("1").divide(ethPrice, 18, RoundingMode.HALF_UP)
+        val ethAmount = ethAmountForEach.multiply(BigDecimal(finalCartPrice.toString()))
+        Log.d("ethAmount", "calculateEth: $ethAmount")
+        val newAmount = ethAmount.toLong()
+        val formatted = "%.10f".format(BigDecimal(newAmount).setScale(3, BigDecimal.ROUND_DOWN))
+        binding.tvEthsRequiredValue.text = "$ethAmount ETH"
+        bundle.putString("ethAmount", ethAmount.toString())
         bundle.putBoolean("isFromCart", true)
 
     }

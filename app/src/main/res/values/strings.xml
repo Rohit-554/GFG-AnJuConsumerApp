@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AnJu</string>
+    <string name="app_name">AnJu Consumer</string>
     <string name="welcome">Welcome</string>
     <string name="select_role">Select Your Role</string>
     <string name="farmers_name">Farmers</string>
@@ -73,6 +73,7 @@
     <string name="view_order">View Order</string>
     <string name="payment_successful">Payment Successful</string>
     <string name="payment_details">Payment Details</string>
+    <string name="creating_wallet_please_wait">Redirecting Please wait for a while…</string>
 
 
 </resources>

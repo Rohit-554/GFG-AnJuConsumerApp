@@ -72,4 +72,5 @@
     <string name="view_order">ऑर्डर देखें</string>
     <string name="payment_successful">भुगतान सफल</string>
     <string name="payment_details">भुगतान विवरण</string>
+    <string name="creating_wallet_please_wait">पुन: निर्देशित किया जा रहा कृपया प्रतीक्षा करें </string>
 </resources>
