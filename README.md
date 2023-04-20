@@ -2,7 +2,7 @@
 ## Problem
 The Indian agricultural sector is plagued by several challenges, including the lack of a direct market for farmers to sell their produce. Farmers often have to sell their produce to intermediaries at low prices, leading to lower profits. Consumers, on the other hand, have limited access to fresh produce at reasonable prices due to the involvement of intermediaries in the supply chain.
 ## Solution
-* Develop an Android app that connects [farmers](https://github.com/Rohit-554/GFG-AnJu/releases/tag/1.0) directly with [consumers](https://github.com/Rohit-554/GFG-AnJuConsumerApp/releases) without any intermediaries.
+* Develop an Android app that connects [farmers](https://github.com/Rohit-554/GFG-AnJu) directly with [consumers](https://github.com/Rohit-554/GFG-AnJuConsumerApp) without any intermediaries.
 * Provide a platform for farmers to list their produce by uploading images, quantity, and price, and for consumers to purchase fresh produce directly from farmers.
 * Use blockchain technology to ensure that all transactions are secure and transparent, with both farmers and consumers having their own wallets to carry out transactions.
 * Make the app available in Hindi, making it accessible to farmers from all parts of India.
