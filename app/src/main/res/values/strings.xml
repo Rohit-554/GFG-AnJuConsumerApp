@@ -74,6 +74,7 @@
     <string name="payment_successful">Payment Successful</string>
     <string name="payment_details">Payment Details</string>
     <string name="creating_wallet_please_wait">Redirecting Please wait for a while…</string>
+    <string name="order_status">Order Status :</string>
 
 
 </resources>

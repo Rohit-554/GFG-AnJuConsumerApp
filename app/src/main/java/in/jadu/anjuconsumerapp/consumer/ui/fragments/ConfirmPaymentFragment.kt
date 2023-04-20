@@ -18,8 +18,9 @@ class ConfirmPaymentFragment : Fragment() {
     ): View {
         binding = FragmentConfirmPaymentBinding.inflate(inflater, container, false)
         binding.vieworder.setOnClickListener {
-            findNavController().navigate(R.id.action_confirmPaymentFragment_to_consumerTrackOrderFragment)
+            findNavController().navigate(R.id.action_confirmPaymentFragment_to_purchasedProductFragment)
         }
+
         // Inflate the layout for this fragment
         return binding.root
     }

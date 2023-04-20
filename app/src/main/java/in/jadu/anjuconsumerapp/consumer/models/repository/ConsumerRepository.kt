@@ -15,4 +15,7 @@ class ConsumerRepository @Inject constructor(private val consumerApiService: Con
 
     suspend fun getCartItems(phoneNo: String) = consumerApiService.getCartItems(phoneNo)
 
+    suspend fun purchasedProductList(phoneNo: String) = consumerApiService.purchasedProductList(phoneNo)
+
+    suspend fun getPurchasedProductList(phoneNo: String) = consumerApiService.getPurchasedProductList(phoneNo)
 }

@@ -19,7 +19,6 @@ class ConsumerTrackOrderFragment : Fragment() {
     ): View {
         binding = FragmentConsumerTrackOrderBinding.inflate(inflater, container, false)
         binding.btnHome.setOnClickListener {
-            findNavController().navigate(R.id.action_consumerTrackOrderFragment_to_selectLanguageFragment)
         }
         // Inflate the layout for this fragment
         return binding.root

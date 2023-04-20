@@ -8,14 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
-import `in`.jadu.anjuconsumerapp.R
 import `in`.jadu.anjuconsumerapp.consumer.adapters.ConsumerCartAdapter
 import `in`.jadu.anjuconsumerapp.consumer.models.dtos.CartTypeDtoItem
-import `in`.jadu.anjuconsumerapp.consumer.viewmodels.ConsumerCartViewModel
+import `in`.jadu.anjuconsumerapp.consumer.viewmodels.CartAndPurchaseViewModel
 import `in`.jadu.anjuconsumerapp.databinding.FragmentConsumerCartBinding
 
 @AndroidEntryPoint
@@ -24,7 +22,7 @@ class ConsumerCartFragment : Fragment() {
     private lateinit var recyclerView:RecyclerView
     private lateinit var adapter:ConsumerCartAdapter
     private lateinit var auth: FirebaseAuth
-    private val consumerCartViewModel: ConsumerCartViewModel by viewModels()
+    private val cartAndPurchaseViewModel: CartAndPurchaseViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,8 +34,8 @@ class ConsumerCartFragment : Fragment() {
         recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
         adapter = ConsumerCartAdapter()
         //get the number from 3
-        consumerCartViewModel.getCartItems(auth.currentUser?.phoneNumber.toString().substring(3))
-        consumerCartViewModel.getCartItems.observe(viewLifecycleOwner){
+        cartAndPurchaseViewModel.getCartItems(auth.currentUser?.phoneNumber.toString().substring(3))
+        cartAndPurchaseViewModel.getCartItems.observe(viewLifecycleOwner){
             if(it.isEmpty()){
                 Toast.makeText(requireContext(), "No Products Available Now", Toast.LENGTH_SHORT).show()
             }else{

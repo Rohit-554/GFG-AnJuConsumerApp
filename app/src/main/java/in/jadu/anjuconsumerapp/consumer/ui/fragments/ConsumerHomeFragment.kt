@@ -107,7 +107,6 @@ class ConsumerHomeFragment : Fragment(),androidx.appcompat.widget.SearchView.OnQ
                          findNavController().navigate(R.id.action_consumerHomeFragment_to_walletFragment)
                     }
                     R.id.gotocart -> {
-                        Toast.makeText(requireContext(), "Loading Cart", Toast.LENGTH_SHORT).show()
                         findNavController().navigate(R.id.action_consumerHomeFragment_to_consumerPreviewPaymentFragment)
                     }
                     R.id.logout -> {

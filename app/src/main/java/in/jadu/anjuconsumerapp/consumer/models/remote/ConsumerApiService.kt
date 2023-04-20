@@ -28,6 +28,11 @@ interface ConsumerApiService {
     @GET("/api/product/{phoneNo}/cart")
     suspend fun getCartItems(@Path("phoneNo") phoneNo: String):Response<CartTypeDto>
 
+    @PUT("/api/product/{phoneNo}/buyProduct")
+    suspend fun purchasedProductList(@Path("phoneNo") phoneNo: String)
+
+    @GET("/api/product/{phoneNo}/buyProduct")
+    suspend fun getPurchasedProductList(@Path("phoneNo") phoneNo: String):Response<CartTypeDto>
 
 
 

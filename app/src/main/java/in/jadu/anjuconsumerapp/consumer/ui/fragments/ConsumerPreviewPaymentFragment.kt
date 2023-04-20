@@ -15,7 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import `in`.jadu.anjuconsumerapp.R
 import `in`.jadu.anjuconsumerapp.consumer.adapters.ConsumerCartAdapter
 import `in`.jadu.anjuconsumerapp.consumer.models.dtos.CartTypeDtoItem
-import `in`.jadu.anjuconsumerapp.consumer.viewmodels.ConsumerCartViewModel
+import `in`.jadu.anjuconsumerapp.consumer.viewmodels.CartAndPurchaseViewModel
 import `in`.jadu.anjuconsumerapp.databinding.FragmentConsumerPreviewPaymentBinding
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -29,7 +29,7 @@ class ConsumerPreviewPaymentFragment : Fragment() {
     private lateinit var bundle: Bundle
     private val eachProductPrice:Double = 0.0
     private var finalCartPrice:Double = 0.0
-    private val consumerCartViewModel: ConsumerCartViewModel by viewModels()
+    private val cartAndPurchaseViewModel: CartAndPurchaseViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,9 +40,14 @@ class ConsumerPreviewPaymentFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
         adapter = ConsumerCartAdapter()
-        consumerCartViewModel.getCartItems(auth.currentUser?.phoneNumber.toString().substring(3))
-        consumerCartViewModel.getCartItems.observe(viewLifecycleOwner){ it ->
-            if(it.isEmpty()){
+        cartAndPurchaseViewModel.getCartItems.observe(viewLifecycleOwner){ it ->
+            if(it.isNullOrEmpty()){
+                binding.tvEmptyCart.visibility = View.VISIBLE
+                binding.viewLine.visibility = View.GONE
+                binding.tvPayment.visibility = View.GONE
+                binding.viewLine2.visibility = View.GONE
+                binding.cardViewPayment.visibility = View.GONE
+                binding.btnPayEther.visibility = View.GONE
                 Toast.makeText(requireContext(), "No Products Available Now", Toast.LENGTH_SHORT).show()
             }else{
                 Log.d("consumerCart", "onCreateView: $it")
@@ -60,6 +65,9 @@ class ConsumerPreviewPaymentFragment : Fragment() {
 
         binding.progressBarCheckout.visibility = View.GONE
 
+        binding.tvTrack.setOnClickListener{
+            findNavController().navigate(R.id.action_consumerPreviewPaymentFragment_to_purchasedProductFragment)
+        }
         binding.btnPayEther.setOnClickListener {
             binding.progressBarCheckout.visibility = View.VISIBLE
             binding.btnPayEther.visibility = View.GONE

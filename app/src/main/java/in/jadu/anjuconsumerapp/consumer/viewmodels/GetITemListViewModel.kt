@@ -59,7 +59,7 @@ class GetITemListViewModel @Inject constructor(
                         productImageUrl = product.productImageUrl,
                         productName = product.productName,
                         productType = product.productType,
-                        quantity = "2"
+                        quantity = "1"
                     )
                 )
             } catch (e: Exception) {

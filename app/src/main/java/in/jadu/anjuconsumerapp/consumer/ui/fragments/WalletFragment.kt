@@ -14,8 +14,10 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import `in`.jadu.anjuconsumerapp.R
+import `in`.jadu.anjuconsumerapp.consumer.viewmodels.CartAndPurchaseViewModel
 import `in`.jadu.anjuconsumerapp.consumer.viewmodels.WalletConnectViewModel
 import `in`.jadu.anjuconsumerapp.databinding.FragmentWalletBinding
 import `in`.jadu.anjuconsumerapp.kvstorage.KvStorage
@@ -35,8 +37,10 @@ class WalletFragment : Fragment() {
     private lateinit var walletAddress: String
     private var isWalletCreated: Boolean = false
     private val walletConnectViewModel: WalletConnectViewModel by viewModels()
+    private val cartAndPurchaseViewModel: CartAndPurchaseViewModel by viewModels()
     private var balance = 0.0
     private var isFromCart: Boolean? = null
+    private var auth: FirebaseAuth = FirebaseAuth.getInstance()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -130,6 +134,8 @@ class WalletFragment : Fragment() {
                            binding.TransefeeringProgressBar.visibility = View.GONE
                             binding.btnSendMoney.visibility = View.VISIBLE
                             if (isFromCart == true) {
+                                auth.currentUser?.phoneNumber?.substring(3)
+                                    ?.let { cartAndPurchaseViewModel.purchaseProductFromCart(it) }
                                 findNavController().navigate(R.id.action_walletFragment_to_confirmPaymentFragment)
                             }
                     }

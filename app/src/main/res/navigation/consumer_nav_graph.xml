@@ -8,11 +8,12 @@
     <fragment
         android:id="@+id/consumerHomeFragment"
         android:name="in.jadu.anjuconsumerapp.consumer.ui.fragments.ConsumerHomeFragment"
-        android:label="fragment_consumer_home"
+        android:label="Home"
         tools:layout="@layout/fragment_consumer_home" >
         <action
             android:id="@+id/action_consumerHomeFragment_to_walletFragment"
-            app:destination="@id/walletFragment" />
+            app:destination="@id/walletFragment"
+            app:popUpTo="@id/consumerHomeFragment" />
         <action
             android:id="@+id/action_consumerHomeFragment_to_consumerPreviewPaymentFragment"
             app:destination="@id/consumerPreviewPaymentFragment" />
@@ -25,32 +26,31 @@
     <fragment
         android:id="@+id/consumerPreviewPaymentFragment"
         android:name="in.jadu.anjuconsumerapp.consumer.ui.fragments.ConsumerPreviewPaymentFragment"
-        android:label="fragment_consumer_preview_payment"
+        android:label="Cart"
         tools:layout="@layout/fragment_consumer_preview_payment" >
         <action
             android:id="@+id/action_consumerPreviewPaymentFragment_to_walletFragment"
             app:destination="@id/walletFragment" />
+        <action
+            android:id="@+id/action_consumerPreviewPaymentFragment_to_purchasedProductFragment"
+            app:destination="@id/purchasedProductFragment"
+            app:popUpTo="@id/consumerPreviewPaymentFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/consumerCartFragment"
         android:name="in.jadu.anjuconsumerapp.consumer.ui.fragments.ConsumerCartFragment"
-        android:label="fragment_consumer_cart"
+        android:label="Cart"
         tools:layout="@layout/fragment_consumer_cart" />
     <fragment
         android:id="@+id/consumerTrackOrderFragment"
         android:name="in.jadu.anjuconsumerapp.consumer.ui.fragments.ConsumerTrackOrderFragment"
         android:label="fragment_consumer_track_order"
-        tools:layout="@layout/fragment_consumer_track_order" >
-        <action
-            android:id="@+id/action_consumerTrackOrderFragment_to_selectLanguageFragment"
-            app:destination="@id/selectLanguageFragment"
-            app:popUpTo="@id/consumerHomeFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
+        tools:layout="@layout/fragment_consumer_track_order" />
     <fragment
         android:id="@+id/selectLanguageFragment"
         android:name="in.jadu.anjuconsumerapp.consumer.commonuis.SelectLanguageFragment"
-        android:label="SelectLanguageFragment" >
+        android:label="Select Language" >
         <action
             android:id="@+id/action_selectLanguageFragment_to_phoneVerificationFragment"
             app:destination="@id/phoneVerificationFragment" />
@@ -63,7 +63,7 @@
     <fragment
         android:id="@+id/phoneVerificationFragment"
         android:name="in.jadu.anjuconsumerapp.consumer.commonuis.PhoneVerificationFragment"
-        android:label="PhoneVerificationFragment" >
+        android:label="Phone Number" >
         <action
             android:id="@+id/action_phoneVerificationFragment_to_confirmOtpFragment"
             app:destination="@id/confirmOtpFragment" />
@@ -71,15 +71,17 @@
     <fragment
         android:id="@+id/confirmOtpFragment"
         android:name="in.jadu.anjuconsumerapp.consumer.commonuis.ConfirmOtpFragment"
-        android:label="ConfirmOtpFragment" >
+        android:label="Confirm OTP" >
         <action
             android:id="@+id/action_confirmOtpFragment_to_consumerHomeFragment"
-            app:destination="@id/consumerHomeFragment" />
+            app:destination="@id/consumerHomeFragment"
+            app:popUpTo="@id/selectLanguageFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/walletFragment"
         android:name="in.jadu.anjuconsumerapp.consumer.ui.fragments.WalletFragment"
-        android:label="WalletFragment" >
+        android:label="Wallet" >
         <action
             android:id="@+id/action_walletFragment_to_walletConnectFragment"
             app:destination="@id/walletConnectFragment" />
@@ -91,7 +93,7 @@
     <fragment
         android:id="@+id/walletConnectFragment"
         android:name="in.jadu.anjuconsumerapp.consumer.ui.fragments.WalletConnectFragment"
-        android:label="WalletConnectFragment" >
+        android:label="Create Wallet" >
         <action
             android:id="@+id/action_walletConnectFragment_to_walletFragment"
             app:destination="@id/walletFragment"
@@ -101,10 +103,21 @@
     <fragment
         android:id="@+id/confirmPaymentFragment"
         android:name="in.jadu.anjuconsumerapp.consumer.ui.fragments.ConfirmPaymentFragment"
-        android:label="ConfirmPaymentFragment" >
+        android:label="Payment Confirmed" >
         <action
-            android:id="@+id/action_confirmPaymentFragment_to_consumerTrackOrderFragment"
-            app:destination="@id/consumerTrackOrderFragment"
+            android:id="@+id/action_confirmPaymentFragment_to_purchasedProductFragment"
+            app:destination="@id/purchasedProductFragment"
+            app:popUpTo="@id/confirmPaymentFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/purchasedProductFragment"
+        android:name="in.jadu.anjuconsumerapp.consumer.ui.fragments.PurchasedProductFragment"
+        android:label="Orders"
+        tools:layout="@layout/fragment_purchased_product" >
+        <action
+            android:id="@+id/action_purchasedProductFragment_to_consumerHomeFragment"
+            app:destination="@id/consumerHomeFragment"
             app:popUpTo="@id/confirmPaymentFragment"
             app:popUpToInclusive="true" />
     </fragment>

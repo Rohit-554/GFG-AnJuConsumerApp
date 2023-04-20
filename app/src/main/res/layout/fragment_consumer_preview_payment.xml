@@ -8,10 +8,41 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/checkoutOrders"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp">
+            <TextView
+                android:id="@+id/tv_ordered_something"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/primary_text_color"
+                android:text="Ordered Something?"
+                />
+            <TextView
+                android:id="@+id/tv_track"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="Track"
+                android:layout_toEndOf="@id/tv_ordered_something"
+                android:gravity="center"
+                android:textColor="@color/blueColor"
+                />
+        </RelativeLayout>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_checkout_products"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/checkoutOrders"
         tools:listitem="@layout/item_list_of_cart"
         tools:itemCount="1"
         android:visibility="visible"
@@ -47,18 +78,41 @@
             android:layout_height="1dp"
             android:layout_below="@id/tv_payment"
             android:background="@color/primary_text_color" />
-        <LinearLayout
-            android:id="@+id/cardViewPayment"
-            android:layout_margin="10dp"
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_empty_cart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/langbuttondesign"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:elevation="10dp"
+            android:textColor="@color/primary_text_color"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:visibility="gone"
+            android:layout_alignParentBottom="true"
+            android:layout_centerVertical="true"
+            android:text="Cart is empty"
+
+            />
+        <LinearLayout
+            android:id="@+id/cardViewPayment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_below="@id/viewLine2"
-            android:orientation="vertical"
-            >
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/langbuttondesign"
+            android:orientation="vertical">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
                 <TextView
                     android:id="@+id/tv_payment_method"
                     android:layout_width="wrap_content"
@@ -77,10 +131,10 @@
                     android:id="@+id/tv_amount_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginEnd="10dp"
+                    android:layout_alignParentEnd="true"
                     android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
                     android:gravity="center"
                     android:text="₹45"
                     android:textColor="@color/white"
@@ -91,8 +145,8 @@
                     android:id="@+id/tv_Delivery_charge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
                     android:layout_below="@id/tv_payment_method"
+                    android:layout_alignParentStart="true"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:gravity="center"
@@ -105,10 +159,10 @@
                     android:id="@+id/tv_delivery_charge_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
                     android:layout_below="@id/tv_amount_value"
-                    android:layout_marginEnd="10dp"
+                    android:layout_alignParentEnd="true"
                     android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
                     android:gravity="center"
                     android:text="Free"
                     android:textColor="@color/white"
@@ -119,8 +173,8 @@
                     android:id="@+id/tv_expected_delivery_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
                     android:layout_below="@id/tv_Delivery_charge"
+                    android:layout_alignParentStart="true"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:gravity="center"
@@ -133,10 +187,10 @@
                     android:id="@+id/tv_expected_delivery_date_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
                     android:layout_below="@id/tv_delivery_charge_value"
-                    android:layout_marginEnd="10dp"
+                    android:layout_alignParentEnd="true"
                     android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
                     android:gravity="center"
                     android:text="17-04-2023"
                     android:textColor="@color/white"
@@ -147,8 +201,8 @@
                     android:id="@+id/tv_eths_required"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
                     android:layout_below="@id/tv_expected_delivery_date"
+                    android:layout_alignParentStart="true"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:gravity="center"
@@ -161,14 +215,14 @@
                     android:id="@+id/tv_eths_required_value"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
                     android:layout_below="@id/tv_eths_required"
-                    android:layout_marginEnd="10dp"
                     android:layout_alignEnd="@+id/tv_eths_required"
+                    android:layout_alignParentEnd="true"
                     android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:ellipsize="end"
                     android:gravity="center"
                     android:maxLines="1"
-                    android:ellipsize="end"
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -196,15 +250,16 @@
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold" />
+
             <ProgressBar
+                android:id="@+id/progressBarCheckout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentStart="true"
-                android:layout_centerInParent="true"
-                android:id="@+id/progressBarCheckout" />
+                android:layout_alignParentBottom="true"
+                android:layout_centerInParent="true" />
 
         </RelativeLayout>
 
