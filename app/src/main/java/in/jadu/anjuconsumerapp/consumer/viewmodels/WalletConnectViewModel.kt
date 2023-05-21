@@ -3,10 +3,12 @@ package `in`.jadu.anjuconsumerapp.consumer.viewmodels
 import android.content.Context
 import android.os.Environment
 import android.util.Log
+import androidx.core.os.BuildCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.viewbinding.BuildConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
-import `in`.jadu.anjuconsumerapp.BuildConfig
+import `in`.jadu.anjuconsumerapp.kvstorage.KvStorage
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -33,13 +35,15 @@ class WalletConnectViewModel @Inject constructor() : ViewModel() {
     private var web3j: Web3j? = null
     private val _walletConnectEvent = Channel<WalletConnectEvent>()
     val walletConnectEvent = _walletConnectEvent.receiveAsFlow()
+    @Inject
+    lateinit var KvStorage: KvStorage
 
     init {
         connectToWallet()
     }
 
     private fun connectToWallet() {
-        web3j = Web3j.build(HttpService(BuildConfig.API_KEY))
+        web3j = Web3j.build(HttpService(`in`.jadu.anjuconsumerapp.BuildConfig.Sepolia_Api_Key))
         try {
             val clientVersion = web3j!!.web3ClientVersion().sendAsync().get()
             if (!clientVersion.hasError()) {
@@ -64,6 +68,7 @@ class WalletConnectViewModel @Inject constructor() : ViewModel() {
             file!!.mkdir()
         }
         if(checkIfWalletAlreadyCreated(file!!,walletPassword)){
+            getPrivateKey()
             viewModelScope.launch {
                 _walletConnectEvent.send(WalletConnectEvent.WalletCreatedSuccessfully(credential!!.address))
             }
@@ -76,6 +81,7 @@ class WalletConnectViewModel @Inject constructor() : ViewModel() {
                     _walletConnectEvent.send(WalletConnectEvent.WalletCreatedSuccessfully(credential!!.address))
                 }
                 Log.d("WalletConnectViewModel", "Wallet Address: ${credential!!.address}")
+                getPrivateKey()
 //            txtAddress.text = credential.address  for displaying address
             } catch (e: Exception) {
                 viewModelScope.launch {
@@ -85,6 +91,12 @@ class WalletConnectViewModel @Inject constructor() : ViewModel() {
             }
         }
 
+    }
+    fun getPrivateKey():String {
+        Log.d("getprivatekey", "getprivatekey: ${credential!!.ecKeyPair.privateKey.toString(16)}")
+        val privateKey = credential!!.ecKeyPair.privateKey.toString(16)
+        KvStorage.storageSetString("PrivateKey", privateKey)
+        return privateKey
     }
 
 

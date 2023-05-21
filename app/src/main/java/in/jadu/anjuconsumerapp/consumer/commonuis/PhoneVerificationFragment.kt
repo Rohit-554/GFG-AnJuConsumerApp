@@ -14,6 +14,7 @@ import com.google.firebase.auth.*
 import dagger.hilt.android.AndroidEntryPoint
 import `in`.jadu.anjuconsumerapp.consumer.commonuis.viewmodels.PhoneVerificationViewModel
 import `in`.jadu.anjuconsumerapp.R
+import `in`.jadu.anjuconsumerapp.consumer.ui.activity.ConsumerActivity
 import `in`.jadu.anjuconsumerapp.databinding.FragmentPhoneVerificationBinding
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
@@ -36,6 +37,7 @@ class PhoneVerificationFragment : Fragment() {
         binding = FragmentPhoneVerificationBinding.inflate(inflater, container, false)
         phoneVerificationViewModel = ViewModelProvider(this)[PhoneVerificationViewModel::class.java]
         auth = FirebaseAuth.getInstance()
+        (activity as ConsumerActivity).hideBottomNavigation()
         getOtp()
 
         lifecycleScope.launch {

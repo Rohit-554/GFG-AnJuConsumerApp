@@ -7,10 +7,14 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
+import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import `in`.jadu.anjuconsumerapp.R
 import `in`.jadu.anjuconsumerapp.consumer.models.dtos.CartTypeDtoItem
+import `in`.jadu.anjuconsumerapp.utility.UtilityFunctions
 
 class ConsumerCartAdapter:RecyclerView.Adapter<ConsumerCartAdapter.ConsumerCartViewHolder>() {
 
@@ -43,6 +47,7 @@ class ConsumerCartAdapter:RecyclerView.Adapter<ConsumerCartAdapter.ConsumerCartV
         val decreaseQuantity: Button = itemView.findViewById(R.id.btn_decrease)
         val increaseQuantity: Button = itemView.findViewById(R.id.btn_increase)
         val tv_inc_dec_quantity: TextView = itemView.findViewById(R.id.inc_dec_amount)
+        val cartItemCardView: CardView = itemView.findViewById(R.id.cart_item_card_view)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConsumerCartViewHolder {
@@ -59,7 +64,7 @@ class ConsumerCartAdapter:RecyclerView.Adapter<ConsumerCartAdapter.ConsumerCartV
         val currentItem = itemTypes[position]
         //remove the surrounding quotes
         holder.productName.text = currentItem.productName.removeSurrounding("\"")
-        holder.productPrice.text = "₹"+currentItem.price.removeSurrounding("\"") + "/Kg"
+        holder.productPrice.text = "₹"+currentItem.price.removeSurrounding("\"")
         holder.productType.text = currentItem.productType.removeSurrounding("\"")
         val imageLink = getImageLink(currentItem.productImageUrl.removeSurrounding("\""))
         Glide.with(holder.itemView.context).load(imageLink).into(holder.productImage)

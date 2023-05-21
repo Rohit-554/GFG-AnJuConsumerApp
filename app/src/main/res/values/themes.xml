@@ -26,4 +26,31 @@
     <style name="PrefixTextStyle" parent="Theme.AnJuConsumerApp">
         <item name="android:layout_marginStart">8dp</item>
     </style>
+
+    <style name="customRoundedImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">0dp</item>
+        <item name="cornerSizeTopRight">16dp</item>
+        <item name="cornerSizeBottomLeft">16dp</item>
+
+    </style>
+
+    <style name="AddItemCardViewSetting" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="shapeAppearanceOverlay">@style/customRounded4Corner</item>
+    </style>
+    <style name="customRounded4Corner" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">0dp</item>
+        <item name="cornerSizeTopRight">20dp</item>
+        <item name="cornerSizeBottomLeft">20dp</item>
+    </style>
+
+    <style name="Style_TextView">
+        <item name="fontFamily">@font/poppins</item>
+    </style>
+
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_bottom</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
+    </style>
 </resources>

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AnJu Consumer</string>
+    <string name="app_name">AgriChain Consumer</string>
     <string name="welcome">Welcome</string>
     <string name="select_role">Select Your Role</string>
     <string name="farmers_name">Farmers</string>
@@ -66,7 +66,7 @@
     <string name="enter_wallet_address">Enter Wallet Address</string>
     <string name="send_fund">Send Fund</string>
     <string name="enter_amount">Enter Amount</string>
-    <string name="total_eths_required">Total Eths Required</string>
+    <string name="total_eths_required">Total Amount Required</string>
     <string name="expected_delivery_date">Expected Delivery Date</string>
     <string name="delivery_cost">Delivery Cost</string>
     <string name="total_amount">Total Amount</string>
@@ -75,6 +75,18 @@
     <string name="payment_details">Payment Details</string>
     <string name="creating_wallet_please_wait">Redirecting Please wait for a while…</string>
     <string name="order_status">Order Status :</string>
+    <string name="proceed_to_buy">Proceed To Buy</string>
+    <string name="area_street_colony">Area/Street/Colony</string>
+    <string name="flat_no_building_name">Flat No/Building Name</string>
+    <string name="use_this_address">Use this address</string>
+    <string name="shipping_to">Shipping to :</string>
+    <string name="items">Items</string>
+    <string name="delivery_charges">delivery charges</string>
+    <string name="home">Home</string>
+    <string name="wallet">Wallet</string>
+    <string name="cart">Cart</string>
+    <string name="profile">Profile\t\t</string>
+    <string name="place_order">Place Order</string>
 
 
 </resources>

@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import `in`.jadu.anjuconsumerapp.consumer.adapters.ConsumerCartAdapter
 import `in`.jadu.anjuconsumerapp.consumer.models.dtos.CartTypeDtoItem
+import `in`.jadu.anjuconsumerapp.consumer.ui.activity.ConsumerActivity
 import `in`.jadu.anjuconsumerapp.consumer.viewmodels.CartAndPurchaseViewModel
 import `in`.jadu.anjuconsumerapp.databinding.FragmentConsumerCartBinding
 
@@ -33,6 +34,7 @@ class ConsumerCartFragment : Fragment() {
         recyclerView = binding.rvConsumerCart
         recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
         adapter = ConsumerCartAdapter()
+
         //get the number from 3
         cartAndPurchaseViewModel.getCartItems(auth.currentUser?.phoneNumber.toString().substring(3))
         cartAndPurchaseViewModel.getCartItems.observe(viewLifecycleOwner){

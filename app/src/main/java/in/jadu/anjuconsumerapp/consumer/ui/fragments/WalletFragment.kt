@@ -11,25 +11,35 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import `in`.jadu.anjuconsumerapp.R
+import `in`.jadu.anjuconsumerapp.consumer.models.dtos.OrderProduct
+import `in`.jadu.anjuconsumerapp.consumer.ui.activity.ConsumerActivity
 import `in`.jadu.anjuconsumerapp.consumer.viewmodels.CartAndPurchaseViewModel
+import `in`.jadu.anjuconsumerapp.consumer.viewmodels.ContractOperationViewModel
+import `in`.jadu.anjuconsumerapp.consumer.viewmodels.GetITemListViewModel
 import `in`.jadu.anjuconsumerapp.consumer.viewmodels.WalletConnectViewModel
 import `in`.jadu.anjuconsumerapp.databinding.FragmentWalletBinding
 import `in`.jadu.anjuconsumerapp.kvstorage.KvStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.web3j.protocol.exceptions.TransactionException
 import java.math.BigDecimal
+import java.math.BigInteger
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class WalletFragment : Fragment() {
     private lateinit var binding: FragmentWalletBinding
-
+    private val contractOperationViewModel: ContractOperationViewModel by viewModels()
     @Inject
     lateinit var KvStorage: KvStorage
     private lateinit var walletName: String
@@ -41,18 +51,28 @@ class WalletFragment : Fragment() {
     private var balance = 0.0
     private var isFromCart: Boolean? = null
     private var auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private var userName:String? = ""
+    private var userPhone:String? = ""
+    private var userAddress:String? = ""
+    private var totalPriceRupees:String? = ""
+    private var contractAddress:String? = ""
+    private var cartAmountInWei:Long? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentWalletBinding.inflate(inflater, container, false)
+        isWalletCreated = KvStorage.storageGetBoolean("isWalletCreated")
         walletName = KvStorage.storageGetString("walletName").toString()
         walletPassword = KvStorage.storageGetString("walletPassword").toString()
         walletAddress = KvStorage.storageGetString("walletAddress").toString()
         isWalletCreated = KvStorage.storageGetBoolean("isWalletCreated")
-
+        contractAddress = KvStorage.storageGetString("contractAddress").toString()
+        Log.d("WalletFragment", "onCreateView: $isWalletCreated")
         if (isWalletCreated) {
             updateUIOnWalletCreation()
+            contractOperationViewModel
             handleEvent()
         } else {
             updateUIWhenWalletNotCreated()
@@ -79,6 +99,7 @@ class WalletFragment : Fragment() {
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // Check if there is a navigation from the payment fragment
@@ -86,15 +107,26 @@ class WalletFragment : Fragment() {
             // Call the function to set the EditText fields
             handlePaymentFromCart()
         }
+        (activity as? ConsumerActivity)?.hideProgressBar()
     }
 
     private fun handlePaymentFromCart(){
         val amount = arguments?.getString("ethAmount")
         isFromCart = arguments?.getBoolean("isFromCart")
+        val userName = arguments?.getString("userName")
+        val userAddress = arguments?.getString("userAddress")
+        val userPhoneNumber = arguments?.getString("userPhoneNumber")
+        val cartPriceInRupees = arguments?.getString("totalPriceRupees")
+        //convert amount to wei
+        val ethAmount = amount?.toDouble()
+        cartAmountInWei = ethAmount?.times(1000000000000000000)?.toLong()
+
         binding.etPeerWalletAddress.requestFocus()
-        binding.etPeerWalletAddress.setText("0x0B3a6557AD46e877CeA3d7670AFB7D53211e6d63")
+        binding.etPeerWalletAddress.setText(contractAddress)
+        binding.etPeerWalletAddress.isEnabled = false
         binding.etPeerBalanceSend.requestFocus()
         binding.etPeerBalanceSend.setText(amount)
+        binding.etPeerBalanceSend.isEnabled = false
     }
 
 
@@ -134,8 +166,7 @@ class WalletFragment : Fragment() {
                            binding.TransefeeringProgressBar.visibility = View.GONE
                             binding.btnSendMoney.visibility = View.VISIBLE
                             if (isFromCart == true) {
-                                auth.currentUser?.phoneNumber?.substring(3)
-                                    ?.let { cartAndPurchaseViewModel.purchaseProductFromCart(it) }
+                                addPurchasedItemOnBlockChain()
                                 findNavController().navigate(R.id.action_walletFragment_to_confirmPaymentFragment)
                             }
                     }
@@ -157,6 +188,45 @@ class WalletFragment : Fragment() {
         }
     }
 
+    private fun addPurchasedItemOnBlockChain(){
+        contractOperationViewModel.contractInstance.observe(requireActivity()){instance->
+            cartAndPurchaseViewModel.getCartItems.observe(requireActivity()){ItemList->
+                val itemIds = ItemList.map { BigInteger(it._id) }
+                val productName = ItemList.map { it.productName }
+                val productQuantities = ItemList.map { BigInteger(it.quantity) }
+                val farmersContractAddresses = ItemList.map { it.contractAddress }
+                val prices = ItemList.map { BigInteger(it.price) }
+
+                lifecycleScope.launch(Dispatchers.IO){
+                    try {
+                        val transactionReceipt = instance?.orderProduct(itemIds, productName, productQuantities, farmersContractAddresses, userAddress, prices,
+                        BigInteger.valueOf(cartAmountInWei!!)
+                            )?.send()
+                        if(transactionReceipt?.isStatusOK!!){
+                            withContext(Dispatchers.Main){
+                                addPurchasedItemOnServer()
+                                findNavController().navigate(R.id.action_walletFragment_to_confirmPaymentFragment)
+                                Log.d("WalletConnectFragment", "addPurchasedItemOnBlockChain: ${transactionReceipt.transactionHash}")
+                            }
+                        }else{
+                            withContext(Dispatchers.Main){
+                                displayErrorSnackBar("Transaction Failed")
+                            }
+                        }
+                    }catch (e:TransactionException){
+                        displayErrorSnackBar("Transaction Failed")
+                        Log.d("transactionFailed",e.toString())
+                    }
+                }
+            }
+        }
+    }
+    private fun addPurchasedItemOnServer() {
+        auth.currentUser?.phoneNumber?.substring(3)
+            ?.let { cartAndPurchaseViewModel.purchaseProductFromCart(it,
+                OrderProduct(userAddress!!, userName!!, userPhone!!, contractAddress!!,walletAddress,totalPriceRupees!!)
+            ) }
+    }
     private fun updateUIOnWalletCreation() {
         binding.lottieAnimationWallet.visibility = View.GONE
         binding.btnSuccess.visibility = View.GONE
@@ -263,5 +333,21 @@ class WalletFragment : Fragment() {
         }
     }
 
+    private fun displayErrorSnackBar(msg: String) {
+        val snackBar = Snackbar.make(
+            requireActivity().findViewById(android.R.id.content),
+            msg,
+            Snackbar.LENGTH_SHORT
+        )
 
+        // Get the TextView from the Snackbar
+//        val snackbarTextView: TextView? = snackBar?.view?.findViewById(com.google.android.material.R.id.snackbar_text)
+//
+//        // Apply the custom style to the TextView
+//        snackbarTextView?.setTextAppearance(R.style.SnackbarText)
+
+        snackBar.setTextColor(ContextCompat.getColor(requireContext(), R.color.primary_text_color))
+        snackBar.setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.ErrorColor))
+        snackBar.show()
+    }
 }

@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.jadu.anjuconsumerapp.consumer.models.dtos.CartTypeDtoItem
+import `in`.jadu.anjuconsumerapp.consumer.models.dtos.OrderProduct
 import `in`.jadu.anjuconsumerapp.consumer.models.repository.ConsumerRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -55,10 +56,10 @@ init {
         }
     }
 
-    fun purchaseProductFromCart(phoneNo:String){
+    fun purchaseProductFromCart(phoneNo:String,orderProduct: OrderProduct){
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                consumerRepository.purchasedProductList(phoneNo)
+                consumerRepository.purchasedProductList(phoneNo,orderProduct)
             } catch (e: Exception) {
                 viewModelScope.launch {
                     mainEventChannel.send(MainEvent.Error(e.message.toString()))
@@ -84,6 +85,19 @@ init {
             }
         }
     }
+
+    fun orderProduct(phoneNo: String) = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            consumerRepository.orderProduct(phoneNo)
+        } catch (e: Exception) {
+            Log.d("response", "orderProduct: ${e.message}")
+            viewModelScope.launch {
+                mainEventChannel.send(MainEvent.Error(e.message.toString()))
+            }
+        }
+    }
+
+
     sealed class MainEvent {
         data class Error(val error: String) : MainEvent()
         data class Success(val message: String) : MainEvent()

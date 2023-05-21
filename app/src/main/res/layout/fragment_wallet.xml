@@ -16,7 +16,8 @@
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottieAnimationView"
             android:layout_width="wrap_content"
-            android:layout_height="400dp"
+            android:layout_height="348dp"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent=".4"
             app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +43,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="16dp"
-                android:fontFamily="@font/lato"
+                android:visibility="gone"
+                android:fontFamily="@font/poppins"
                 android:text="Wallet Created Successfully"
                 android:textColor="@color/primary_text_color"
                 android:textSize="16sp"
@@ -51,12 +53,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/btn_create_wallet" />
 
-            <androidx.cardview.widget.CardView
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/cardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 app:cardCornerRadius="5dp"
+
                 app:layout_constraintBottom_toTopOf="@id/guideline"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -64,6 +67,7 @@
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
+                    android:background="@drawable/stroke_rectangular"
                     android:layout_height="wrap_content">
 
                     <androidx.appcompat.widget.AppCompatTextView
@@ -76,6 +80,7 @@
                         android:layout_marginStart="15dp"
                         android:layout_marginTop="15dp"
                         android:layout_marginEnd="15dp"
+                        android:fontFamily="@font/poppins"
                         android:layout_marginBottom="15dp"
                         android:text="@string/wallet_name"
                         android:textColor="@color/primary_text_color"
@@ -86,7 +91,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="15dp"
-
+                        android:fontFamily="@font/poppins"
                         android:layout_marginTop="15dp"
                         android:layout_marginEnd="15dp"
                         android:layout_marginBottom="15dp"
@@ -102,6 +107,7 @@
                         android:layout_marginStart="15dp"
                         android:layout_marginEnd="15dp"
                         android:layout_marginBottom="15dp"
+                        android:fontFamily="@font/poppins"
                         android:text="@string/wallet_password"
                         android:textColor="@color/primary_text_color"
                         android:textStyle="bold" />
@@ -112,6 +118,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/tv_wallet_name"
                         android:layout_marginStart="15dp"
+                        android:fontFamily="@font/poppins"
                         android:layout_marginEnd="15dp"
                         android:layout_marginBottom="15dp"
                         android:layout_toEndOf="@id/tv_wallet_password_text"
@@ -126,6 +133,7 @@
                         android:layout_marginStart="15dp"
                         android:layout_marginEnd="15dp"
                         android:layout_marginBottom="15dp"
+                        android:fontFamily="@font/poppins"
                         android:text="@string/acc_address"
                         android:textColor="@color/primary_text_color"
                         android:textStyle="bold" />
@@ -138,6 +146,7 @@
                         android:layout_marginStart="15dp"
                         android:layout_marginEnd="15dp"
                         android:layout_marginBottom="15dp"
+                        android:fontFamily="@font/poppins"
                         android:layout_toStartOf="@id/copytext"
                         android:layout_toEndOf="@id/tv_wallet_address_text"
                         android:ellipsize="end"
@@ -164,6 +173,7 @@
                         android:layout_marginEnd="15dp"
                         android:layout_marginBottom="15dp"
                         android:text="Account Balance"
+                        android:fontFamily="@font/poppins"
                         android:textColor="@color/primary_text_color"
                         android:textStyle="bold" />
 
@@ -176,6 +186,7 @@
                         android:layout_marginEnd="15dp"
                         android:ellipsize="end"
                         android:maxLines="1"
+                        android:fontFamily="@font/poppins"
                         android:layout_marginBottom="15dp"
                         android:layout_toEndOf="@id/tv_wallet_balance"
                         android:text="balance" />
@@ -188,13 +199,14 @@
                         android:layout_alignParentEnd="true"
                         android:layout_marginEnd="10dp"
                         android:text="Fetch Balance"
+                        android:fontFamily="@font/poppins"
                         android:textColor="#3366CC"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
                 </RelativeLayout>
 
-            </androidx.cardview.widget.CardView>
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_add_money"
@@ -205,7 +217,7 @@
                 android:layout_margin="16dp"
                 android:background="@drawable/langbuttondesign"
                 android:drawableTint="@color/white"
-                android:fontFamily="@font/lato_bold"
+                android:fontFamily="@font/poppins_medium"
                 android:text="Deposit Fund"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
@@ -217,6 +229,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            app:layout_constraintVertical_bias=".1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ll_wallet_created">
@@ -227,8 +240,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="16dp"
-                android:fontFamily="@font/lato"
-                android:text="Send Fund"
+                android:text="@string/send_fund"
+                android:fontFamily="@font/poppins"
                 android:textColor="@color/primary_text_color"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -236,7 +249,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/btn_create_wallet" />
 
-            <androidx.cardview.widget.CardView
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/sendfuncardview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -249,7 +262,9 @@
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/stroke_rectangular"
+                    >
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/textInputLayout"
@@ -275,8 +290,8 @@
                             android:id="@+id/et_peer_wallet_address"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/enter_wallet_address"
                             android:inputType="text"
+                            android:fontFamily="@font/poppins"
                             />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -300,12 +315,13 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_peer_balance_send"
                             android:layout_width="match_parent"
+                            android:fontFamily="@font/poppins"
                             android:layout_height="wrap_content"
                             android:inputType="numberDecimal" />
                     </com.google.android.material.textfield.TextInputLayout>
                 </RelativeLayout>
 
-            </androidx.cardview.widget.CardView>
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -320,16 +336,21 @@
                     android:layout_margin="16dp"
                     android:visibility="gone"
                     />
+
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_send_money"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_margin="16dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
                     android:background="@drawable/langbuttondesign"
                     android:drawableTint="@color/white"
-                    android:fontFamily="@font/lato_bold"
+                    android:fontFamily="@font/poppins_medium"
                     android:text="@string/send_fund"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
@@ -345,8 +366,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:fontFamily="@font/lato_bold"
             android:text="@string/wallet_not_created"
+            android:fontFamily="@font/poppins"
             android:textColor="@color/primary_text_color"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -360,13 +381,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginTop="20dp"
+            android:fontFamily="@font/poppins_medium"
             android:layout_marginEnd="15dp"
             android:background="@drawable/langbuttondesign"
-            android:fontFamily="@font/lato_bold"
             android:text="@string/create_wallet"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_success_text" />
@@ -384,7 +405,16 @@
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/progress" />
-
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="64dp"
+            app:layout_constraintTop_toBottomOf="@id/ll_send_money"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

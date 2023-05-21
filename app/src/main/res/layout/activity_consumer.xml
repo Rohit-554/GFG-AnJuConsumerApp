@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
     <androidx.fragment.app.FragmentContainerView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
@@ -12,3 +15,58 @@
         app:navGraph="@navigation/consumer_nav_graph"
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="1dp" />
+    <ProgressBar
+        android:id="@+id/loadwalletprogress"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:visibility="gone"
+        android:indeterminateTint="@color/btn_color"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:elevation="10dp"
+        android:layout_gravity="top|center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/circularbackground"
+        />
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:id="@+id/bottomAppBar"
+        style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
+        android:backgroundTint="@color/white"
+        app:fabCradleMargin="10dp"
+        android:theme="@style/Theme.MaterialComponents"
+        app:fabCradleRoundedCornerRadius="10dp"
+        app:fabCradleVerticalOffset="10dp"
+        >
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:itemIconTint="@color/bnv_tab_item_foreground"
+            app:itemTextColor="@color/bnv_tab_item_foreground"
+            android:id="@+id/bottomNavigationView"
+            android:layout_marginEnd="16dp"
+            app:itemTextAppearanceActive="@style/Style_TextView"
+            app:menu="@menu/home_menu"
+            android:background="@drawable/transparent_background"
+            />
+    </com.google.android.material.bottomappbar.BottomAppBar>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/CameraBtn"
+        android:src="@drawable/baseline_camera_alt_24"
+        android:tint="@color/white"
+        android:backgroundTint="@color/blueColor"
+        android:theme="@style/Theme.AppCompat"
+        app:layout_anchor="@id/bottomAppBar"
+
+        android:contentDescription="Capture Photo" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+

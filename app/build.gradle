@@ -22,7 +22,7 @@ android {
         Properties properties = new Properties()
         properties.load(project.rootProject.file('local.properties').newDataInputStream())
         buildConfigField "String", "API_KEY", "\"${properties.getProperty('API_KEY')}\""
-
+        buildConfigField "String", "Sepolia_Api_Key", "\"${properties.getProperty('Sepolia_Api_Key')}\""
     }
 
     buildTypes {
@@ -76,4 +76,8 @@ dependencies {
 
     implementation 'org.web3j:core:4.8.7-android'
     implementation 'com.github.bumptech.glide:glide:4.15.1'
+    implementation('androidx.palette:palette:1.0.0')
+
+    //bar code reader
+    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
 }

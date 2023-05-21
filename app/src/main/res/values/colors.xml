@@ -17,6 +17,13 @@
     <color name="blueColor">#59A5D8</color>
     <color name="whitedull">#F8F8F8</color>
     <color name="TextCopyBackground">#23CE6B</color>
-
+    <color name="lightShadeBlue">#EFFFFD</color>
     <color name="colorPrimary">#3F51B5</color>
+    <color name="lightWhite">#70FFFFFF</color>
+    <color name="yellowish">#FFD24C</color>
+    <color name="greyishLayoutBackground">#F4F3F3</color>
+    <color name="lightGreyish">#D8D3CD</color>
+    <color name="lightRed">#B04759</color>
+    <color name="surface">#FFFFFF</color>
+
 </resources>

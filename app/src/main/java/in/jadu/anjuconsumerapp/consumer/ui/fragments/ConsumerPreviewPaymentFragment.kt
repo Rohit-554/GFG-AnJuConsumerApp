@@ -15,6 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import `in`.jadu.anjuconsumerapp.R
 import `in`.jadu.anjuconsumerapp.consumer.adapters.ConsumerCartAdapter
 import `in`.jadu.anjuconsumerapp.consumer.models.dtos.CartTypeDtoItem
+import `in`.jadu.anjuconsumerapp.consumer.ui.activity.ConsumerActivity
 import `in`.jadu.anjuconsumerapp.consumer.viewmodels.CartAndPurchaseViewModel
 import `in`.jadu.anjuconsumerapp.databinding.FragmentConsumerPreviewPaymentBinding
 import java.math.BigDecimal
@@ -40,16 +41,16 @@ class ConsumerPreviewPaymentFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
         adapter = ConsumerCartAdapter()
+        (activity as ConsumerActivity).showBottomNavigation()
         cartAndPurchaseViewModel.getCartItems.observe(viewLifecycleOwner){ it ->
             if(it.isNullOrEmpty()){
+                binding.loadItem.visibility = View.GONE
                 binding.tvEmptyCart.visibility = View.VISIBLE
-                binding.viewLine.visibility = View.GONE
-                binding.tvPayment.visibility = View.GONE
-                binding.viewLine2.visibility = View.GONE
-                binding.cardViewPayment.visibility = View.GONE
-                binding.btnPayEther.visibility = View.GONE
                 Toast.makeText(requireContext(), "No Products Available Now", Toast.LENGTH_SHORT).show()
             }else{
+                binding.loadItem.visibility = View.GONE
+                binding.nestedScrollView.visibility = View.VISIBLE
+                binding.tvEmptyCart.visibility = View.GONE
                 Log.d("consumerCart", "onCreateView: $it")
                 adapter.itemTypes = it
                 it.forEach {cartType->
@@ -63,16 +64,21 @@ class ConsumerPreviewPaymentFragment : Fragment() {
             Log.d("finalCartPrice", "onCreateView: $finalCartPrice")
         }
 
-        binding.progressBarCheckout.visibility = View.GONE
+
+//        binding.progressBarCheckout.visibility = View.GONE
 
         binding.tvTrack.setOnClickListener{
             findNavController().navigate(R.id.action_consumerPreviewPaymentFragment_to_purchasedProductFragment)
         }
-        binding.btnPayEther.setOnClickListener {
-            binding.progressBarCheckout.visibility = View.VISIBLE
-            binding.btnPayEther.visibility = View.GONE
-            findNavController().navigate(R.id.action_consumerPreviewPaymentFragment_to_walletFragment, bundle)
+//        binding.btnPayEther.setOnClickListener {
+//            binding.progressBarCheckout.visibility = View.VISIBLE
+//            binding.btnPayEther.visibility = View.GONE
+//            findNavController().navigate(R.id.action_consumerPreviewPaymentFragment_to_walletFragment, bundle)
+//        }
+        binding.proceedToBuy.setOnClickListener {
+            findNavController().navigate(R.id.action_consumerPreviewPaymentFragment_to_consumerAddressFragment,bundle)
         }
+
         clickEvents()
 
         return binding.root
@@ -93,18 +99,16 @@ class ConsumerPreviewPaymentFragment : Fragment() {
         })
     }
 
-    fun calculateEth(finalCartPrice: Double) {
-
+    private fun calculateEth(finalCartPrice: Double) {
         val ethPrice = BigDecimal("171666.03")
         val ethAmountForEach = BigDecimal("1").divide(ethPrice, 18, RoundingMode.HALF_UP)
         val ethAmount = ethAmountForEach.multiply(BigDecimal(finalCartPrice.toString()))
         Log.d("ethAmount", "calculateEth: $ethAmount")
         val newAmount = ethAmount.toLong()
         val formatted = "%.10f".format(BigDecimal(newAmount).setScale(3, BigDecimal.ROUND_DOWN))
-        binding.tvEthsRequiredValue.text = "$ethAmount ETH"
         bundle.putString("ethAmount", ethAmount.toString())
         bundle.putBoolean("isFromCart", true)
-
+        bundle.putString("totalPriceRupees", finalCartPrice.toString())
     }
 
 }

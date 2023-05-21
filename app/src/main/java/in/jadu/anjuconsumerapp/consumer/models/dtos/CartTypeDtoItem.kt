@@ -7,5 +7,7 @@ data class CartTypeDtoItem(
     val productImageUrl: String,
     val productName: String,
     val productType: String,
-    val quantity: String
+    val quantity: String,
+    val web3Id:String,
+    val contractAddress:String,
 )

@@ -15,6 +15,7 @@ import com.google.firebase.auth.*
 import dagger.hilt.android.AndroidEntryPoint
 import `in`.jadu.anjuconsumerapp.R
 import `in`.jadu.anjuconsumerapp.consumer.commonuis.viewmodels.PhoneVerificationViewModel
+import `in`.jadu.anjuconsumerapp.consumer.ui.activity.ConsumerActivity
 import `in`.jadu.anjuconsumerapp.databinding.FragmentConfirmotpBinding
 
 
@@ -33,7 +34,9 @@ class ConfirmOtpFragment : Fragment() {
     ): View {
         binding = FragmentConfirmotpBinding.inflate(inflater, container, false)
         auth = FirebaseAuth.getInstance()
-        currentUser = auth.currentUser
+       (activity as ConsumerActivity).hideBottomNavigation()
+
+    currentUser = auth.currentUser
         phoneAuthId = arguments?.getString("verificationId")
         // Inflate the layout for this fragment
 

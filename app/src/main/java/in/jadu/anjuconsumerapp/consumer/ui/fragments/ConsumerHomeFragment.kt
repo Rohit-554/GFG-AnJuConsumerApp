@@ -23,6 +23,7 @@ import `in`.jadu.anjuconsumerapp.R
 import `in`.jadu.anjuconsumerapp.consumer.adapters.ProductListAdapter
 import `in`.jadu.anjuconsumerapp.consumer.commonuis.viewmodels.PhoneVerificationViewModel
 import `in`.jadu.anjuconsumerapp.consumer.models.dtos.Product
+import `in`.jadu.anjuconsumerapp.consumer.ui.activity.ConsumerActivity
 import `in`.jadu.anjuconsumerapp.consumer.viewmodels.GetITemListViewModel
 import `in`.jadu.anjuconsumerapp.databinding.FragmentConsumerHomeBinding
 import kotlinx.coroutines.launch
@@ -41,9 +42,10 @@ class ConsumerHomeFragment : Fragment(),androidx.appcompat.widget.SearchView.OnQ
     ): View {
         auth = FirebaseAuth.getInstance()
         createUserOnServer()
+        (activity as ConsumerActivity).showBottomNavigation()
         binding = FragmentConsumerHomeBinding.inflate(inflater, container, false)
         recyclerView = binding.rvListOfProducts
-        recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
+        recyclerView.layoutManager = androidx.recyclerview.widget.GridLayoutManager(requireContext(),2, androidx.recyclerview.widget.LinearLayoutManager.VERTICAL, false)
         adapter = ProductListAdapter()
         //call the main event
         lifecycleScope.launch {
@@ -63,21 +65,20 @@ class ConsumerHomeFragment : Fragment(),androidx.appcompat.widget.SearchView.OnQ
             if(it.isEmpty()){
                 Toast.makeText(requireContext(), "No Products Available Now", Toast.LENGTH_SHORT).show()
             }else{
+
                 adapter.itemTypes = it
                 recyclerView.adapter = adapter
                 adapter.notifyDataSetChanged()
             }
-
         }
 
         adapter.setOnItemClickListener(object : ProductListAdapter.OnItemClickListener {
             override fun onItemClick(product: Product) {
+                Log.d("rohitss", "onItemClick: "+product)
                 getITemListViewModel.addToCart(auth.currentUser?.phoneNumber?.substring(3)!!,product._id,product)
                 Toast.makeText(requireContext(), "Added to cart", Toast.LENGTH_SHORT).show()
             }
-
         })
-        // Inflate the layout for this fragment
         return binding.root
     }
 
@@ -101,14 +102,6 @@ class ConsumerHomeFragment : Fragment(),androidx.appcompat.widget.SearchView.OnQ
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 when (menuItem.itemId) {
-                    R.id.wallet -> {
-                        binding.walletloadingprogressbar.visibility = View.VISIBLE
-                        Toast.makeText(requireContext(), "Loading Wallet", Toast.LENGTH_SHORT).show()
-                         findNavController().navigate(R.id.action_consumerHomeFragment_to_walletFragment)
-                    }
-                    R.id.gotocart -> {
-                        findNavController().navigate(R.id.action_consumerHomeFragment_to_consumerPreviewPaymentFragment)
-                    }
                     R.id.logout -> {
                         Toast.makeText(requireContext(), "Logging Out", Toast.LENGTH_SHORT).show()
                         auth.signOut()
@@ -130,6 +123,7 @@ class ConsumerHomeFragment : Fragment(),androidx.appcompat.widget.SearchView.OnQ
         filterListAccordingToKeyword(p0)
         return true
     }
+
 
     private fun filterListAccordingToKeyword(p0: String?) {
         getITemListViewModel.getAllItemList.observe(viewLifecycleOwner){
