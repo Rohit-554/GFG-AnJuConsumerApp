@@ -16,7 +16,9 @@ import org.web3j.crypto.Credentials
 import org.web3j.crypto.WalletUtils
 import org.web3j.protocol.Web3j
 import org.web3j.protocol.core.DefaultBlockParameterName
+import org.web3j.protocol.core.methods.response.Transaction
 import org.web3j.protocol.core.methods.response.TransactionReceipt
+import org.web3j.protocol.exceptions.TransactionException
 import org.web3j.protocol.http.HttpService
 import org.web3j.tx.Transfer
 import org.web3j.tx.gas.DefaultGasProvider
@@ -148,6 +150,7 @@ class WalletConnectViewModel @Inject constructor() : ViewModel() {
                 _walletConnectEvent.send(WalletConnectEvent.WalletTransactionException(e.message.toString()))
             }
         }
+
     }
 
     private fun createReceipt(value: Double, toAddress: String): TransactionReceipt {
@@ -157,7 +160,7 @@ class WalletConnectViewModel @Inject constructor() : ViewModel() {
             toAddress,
             BigDecimal.valueOf(value),
             Convert.Unit.ETHER,
-            BigInteger.valueOf(21000L),
+            BigInteger.valueOf(6721975L),
             BigInteger.valueOf(1500000000L),
             BigInteger.valueOf(38654000000L),
         ).send()

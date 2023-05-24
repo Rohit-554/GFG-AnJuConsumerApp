@@ -15,6 +15,7 @@ import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import `in`.jadu.anjuconsumerapp.R
 import `in`.jadu.anjuconsumerapp.consumer.ui.activity.ConsumerActivity
+import `in`.jadu.anjuconsumerapp.consumer.ui.fragments.ConsumerHomeFragment
 import `in`.jadu.anjuconsumerapp.databinding.FragmentSelectLanguageBinding
 import `in`.jadu.anjuconsumerapp.kvstorage.KvStorage
 import java.lang.reflect.Constructor

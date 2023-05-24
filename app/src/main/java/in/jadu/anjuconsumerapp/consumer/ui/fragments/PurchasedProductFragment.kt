@@ -21,12 +21,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp
 import `in`.jadu.anjuconsumerapp.R
 import `in`.jadu.anjuconsumerapp.consumer.adapters.PurchasedProductAdapter
+import `in`.jadu.anjuconsumerapp.consumer.ui.activity.ConsumerActivity
 import `in`.jadu.anjuconsumerapp.consumer.viewmodels.CartAndPurchaseViewModel
 import `in`.jadu.anjuconsumerapp.databinding.FragmentPurchasedProductBinding
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class PurchasedProductFragment : Fragment() {
+class PurchasedProductFragment : Fragment(),PurchasedProductAdapter.OnItemClickListener {
     private lateinit var binding: FragmentPurchasedProductBinding
     private lateinit var recyclerView: RecyclerView
     private lateinit var purchasedProductAdapter: PurchasedProductAdapter
@@ -38,25 +39,21 @@ class PurchasedProductFragment : Fragment() {
         binding = FragmentPurchasedProductBinding.inflate(inflater, container, false)
         recyclerView = binding.rvPurchasedProduct
         recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(requireContext())
-        purchasedProductAdapter = PurchasedProductAdapter()
+        purchasedProductAdapter = PurchasedProductAdapter(this)
         handleEvent()
 
-        cartAndPurchaseViewModel.getPurchasedItems.observe(viewLifecycleOwner){
-            Log.d("purchaseProduct", "onCreateView: $it")
-            if(it.isNullOrEmpty()){
+        cartAndPurchaseViewModel.getOrderedProducts.observe(viewLifecycleOwner){
+            if(it.orders.products.isEmpty()) {
                 Toast.makeText(requireContext(), "No Products Purchased", Toast.LENGTH_SHORT).show()
             }else{
-                purchasedProductAdapter.purchasedProductList = it
+                purchasedProductAdapter.purchasedProduct = it
                 recyclerView.adapter = purchasedProductAdapter
                 purchasedProductAdapter.notifyDataSetChanged()
             }
         }
-
-
-
-        // Inflate the layout for this fragment
         return binding.root
     }
+
     private fun handleEvent() {
         lifecycleScope.launch {
             cartAndPurchaseViewModel.mainEvent.collect { event ->
@@ -74,7 +71,15 @@ class PurchasedProductFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as ConsumerActivity).hideBottomNavigation()
+        (activity as ConsumerActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         setupMenu()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        (activity as ConsumerActivity).showBottomNavigation()
+        (activity as ConsumerActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     private fun setupMenu() {
@@ -94,6 +99,12 @@ class PurchasedProductFragment : Fragment() {
             }
 
         },viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    override fun onItemClicked(position: Int) {
+        val bundle:Bundle = Bundle()
+        bundle.putInt("position",position)
+        findNavController().navigate(R.id.action_purchasedProductFragment_to_orderedProductDetailsFragment,bundle)
     }
 
 

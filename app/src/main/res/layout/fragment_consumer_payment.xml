@@ -3,9 +3,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/greyishLayoutBackground"
     tools:context=".consumer.ui.fragments.ConsumerPaymentFragment">
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/order_processing_loader_animator"
+        android:layout_width="256dp"
+        android:layout_height="256dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/guideline"
+        app:lottie_rawRes="@raw/loadinganimation"
+        app:lottie_autoPlay="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:lottie_loop="true"
+        android:elevation="4dp"
+        android:visibility="gone"
+        />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent=".58"
+        />
 <androidx.appcompat.widget.LinearLayoutCompat
     android:id="@+id/ll_consumer_payment"
     android:layout_width="match_parent"
@@ -201,19 +222,44 @@
             />
 
     </RelativeLayout>
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_place_order"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:background="@drawable/langbuttondesign"
-        android:text="@string/place_order"
-        android:backgroundTint="@color/yellowish"
-        android:textColor="@color/primary_text_color"
-        android:textSize="16sp"
-        android:fontFamily="@font/poppins"
-        android:textAllCaps="false"
-        />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ProgressBar
+            android:id="@+id/place_order_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:visibility="gone"
+            app:lottie_autoPlay="true"
+            android:indeterminateTint="@color/white"
+            android:elevation="10dp"
+            android:layout_alignStart="@id/btn_place_order"
+            android:layout_alignEnd="@id/btn_place_order"
+            android:layout_alignTop="@id/btn_place_order"
+            android:layout_alignBottom="@id/btn_place_order"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/progress"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_place_order"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/langbuttondesign"
+            android:backgroundTint="@color/yellowish"
+            android:fontFamily="@font/poppins"
+            android:text="@string/place_order"
+            android:textAllCaps="false"
+            android:textColor="@color/primary_text_color"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+
 </androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

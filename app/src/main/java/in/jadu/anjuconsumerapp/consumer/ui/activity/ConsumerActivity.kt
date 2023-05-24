@@ -1,12 +1,16 @@
 package `in`.jadu.anjuconsumerapp.consumer.ui.activity
 
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
@@ -21,6 +25,7 @@ import com.journeyapps.barcodescanner.ScanIntentResult
 import com.journeyapps.barcodescanner.ScanOptions
 import dagger.hilt.android.AndroidEntryPoint
 import `in`.jadu.anjuconsumerapp.R
+import `in`.jadu.anjuconsumerapp.consumer.ui.fragments.ConsumerHomeFragment
 import `in`.jadu.anjuconsumerapp.databinding.ActivityConsumerBinding
 
 
@@ -38,7 +43,6 @@ class ConsumerActivity : AppCompatActivity() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
-//        supportActionBar?.setDisplayHomeAsUpEnabled(false)
         setupActionBarWithNavController(navController)
         binding.bottomNavigationView.setupWithNavController(navController)
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
@@ -67,13 +71,28 @@ class ConsumerActivity : AppCompatActivity() {
 //                    navController.popBackStack()
                     true
                 }
+
+                R.id.consumerProfileFragment -> {
+                    findNavController(R.id.nav_host_fragment).navigate(R.id.consumerProfileFragment)
+                    true
+                }
+
+
                 else -> false
             }
         }
     }
+    fun navigateToHome(){
+        findNavController(R.id.nav_host_fragment).navigate(R.id.consumerHomeFragment)
+    }
     fun showProgressBar() {
         binding.loadwalletprogress.visibility = View.VISIBLE
     }
+
+    fun setupActionBarColor(color: Int) {
+        supportActionBar?.setBackgroundDrawable(ColorDrawable(color))
+    }
+
 
     fun hideProgressBar() {
         binding.loadwalletprogress.visibility = View.GONE
@@ -97,6 +116,18 @@ class ConsumerActivity : AppCompatActivity() {
     fun hideFab(){
         binding.CameraBtn.visibility = View.GONE
     }
+
+    fun setActionBarTitleTextColor(){
+        supportActionBar?.title = SpannableString(supportActionBar?.title).apply {
+            setSpan(
+                ForegroundColorSpan(Color.BLACK),
+                0,
+                length,
+                0
+            )
+        }
+    }
+
     private fun showDialog() {
         customDialog.setContentView(R.layout.createcameradialog)
         val dismissGifDialog = customDialog.findViewById<ImageView>(R.id.dismissGifDialog)
@@ -109,6 +140,7 @@ class ConsumerActivity : AppCompatActivity() {
             options.setCameraId(0) // Use a specific camera of the device
             options.setOrientationLocked(true)
             options.setBeepEnabled(true)
+            options.setBeepEnabled(false)
             options.setBarcodeImageEnabled(true)
             barcodeLauncher.launch(options)
             customDialog.dismiss()
@@ -132,11 +164,14 @@ class ConsumerActivity : AppCompatActivity() {
         if (result.contents == null) {
             Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(
-                this,
-                "Scanned: " + result.contents,
-                Toast.LENGTH_LONG
-            ).show()
+            val intent = Intent(this, ProductDetails::class.java)
+            intent.putExtra("barcode", result.contents)
+            startActivity(intent)
+//            Toast.makeText(
+//                this,
+//                "Scanned: " + result.contents,
+//                Toast.LENGTH_LONG
+//            ).show()
         }
     }
 

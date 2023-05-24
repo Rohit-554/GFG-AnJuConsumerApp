@@ -24,7 +24,8 @@ class ProductListAdapter():RecyclerView.Adapter<ProductListAdapter.ProductListVi
 
 
     interface OnItemClickListener {
-        fun onItemClick(product: Product)
+        fun onItemButtonClicked(product: Product)
+        fun onItemClicked(product: Product)
     }
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
@@ -40,6 +41,8 @@ class ProductListAdapter():RecyclerView.Adapter<ProductListAdapter.ProductListVi
         val itemListCardView:CardView = itemView.findViewById(R.id.item_list_card_view)
         val ivAddToCart:ImageView = itemView.findViewById(R.id.iv_add_to_cart)
 //        val productType:TextView = itemView.findViewById(R.id.ItemProductType)
+
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductListViewHolder {
@@ -80,8 +83,13 @@ class ProductListAdapter():RecyclerView.Adapter<ProductListAdapter.ProductListVi
 //            .into(holder.productImage)
         holder.btnAddToCart.setOnClickListener {
             holder.ivAddToCart.setImageResource(R.drawable.tick_icon)
-            listener?.onItemClick(currentItem)
+            listener?.onItemButtonClicked(currentItem)
         }
+
+        holder.itemView.setOnClickListener {
+            listener?.onItemClicked(currentItem)
+        }
+
     }
     private fun getImageLink(imgId:String): String {
         val baseUrl = "https://firebasestorage.googleapis.com/v0/b/productserver-57d88.appspot.com/"

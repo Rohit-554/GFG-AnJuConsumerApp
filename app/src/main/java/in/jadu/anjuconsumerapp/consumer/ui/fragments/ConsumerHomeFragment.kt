@@ -10,6 +10,8 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.viewModels
@@ -36,6 +38,8 @@ class ConsumerHomeFragment : Fragment(),androidx.appcompat.widget.SearchView.OnQ
     private val getITemListViewModel: GetITemListViewModel by viewModels()
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: ProductListAdapter
+    private lateinit var bundle: Bundle
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,6 +48,7 @@ class ConsumerHomeFragment : Fragment(),androidx.appcompat.widget.SearchView.OnQ
         createUserOnServer()
         (activity as ConsumerActivity).showBottomNavigation()
         binding = FragmentConsumerHomeBinding.inflate(inflater, container, false)
+        bundle = bundleOf()
         recyclerView = binding.rvListOfProducts
         recyclerView.layoutManager = androidx.recyclerview.widget.GridLayoutManager(requireContext(),2, androidx.recyclerview.widget.LinearLayoutManager.VERTICAL, false)
         adapter = ProductListAdapter()
@@ -73,10 +78,26 @@ class ConsumerHomeFragment : Fragment(),androidx.appcompat.widget.SearchView.OnQ
         }
 
         adapter.setOnItemClickListener(object : ProductListAdapter.OnItemClickListener {
-            override fun onItemClick(product: Product) {
+            override fun onItemButtonClicked(product: Product) {
                 Log.d("rohitss", "onItemClick: "+product)
                 getITemListViewModel.addToCart(auth.currentUser?.phoneNumber?.substring(3)!!,product._id,product)
                 Toast.makeText(requireContext(), "Added to cart", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onItemClicked(product: Product) {
+                Log.d("rohitss", "onItemClickItem: "+product)
+                bundle = bundleOf(
+                    "productName" to product.productName,
+                    "productDescription" to product.description,
+                    "productExpire" to product.productExpire,
+                    "productImgUrl" to product.productImageUrl,
+                    "seedingDate" to product.productPacked,
+                    "productType" to product.productType,
+                    "productId" to product.web3Id,
+                    "contractAddress" to product.contractAddress,
+                    "productPrice" to product.productPrice,
+                )
+                findNavController().navigate(R.id.action_consumerHomeFragment_to_productDetailsFragment,bundle)
             }
         })
         return binding.root
@@ -88,7 +109,17 @@ class ConsumerHomeFragment : Fragment(),androidx.appcompat.widget.SearchView.OnQ
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        removeBackButton()
         setupMenu()
+    }
+
+    private fun removeBackButton(){
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     private fun setupMenu() {
@@ -118,6 +149,7 @@ class ConsumerHomeFragment : Fragment(),androidx.appcompat.widget.SearchView.OnQ
     override fun onQueryTextSubmit(p0: String?): Boolean {
         return true
     }
+
 
     override fun onQueryTextChange(p0: String?): Boolean {
         filterListAccordingToKeyword(p0)

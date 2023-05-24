@@ -23,7 +23,7 @@ class ConsumerAddressFragment : Fragment() {
         binding= FragmentConsumerAddressBinding.inflate(inflater, container, false)
         binding.btnAddAddress.setOnClickListener {
             setupBundle()
-            findNavController().navigate(R.id.action_consumerAddressFragment_to_consumerPaymentFragment,bundle)
+            findNavController().navigate(`in`.jadu.anjuconsumerapp.R.id.action_consumerAddressFragment_to_consumerPaymentFragment,bundle)
         }
         (activity as? ConsumerActivity)?.hideBottomNavigation()
 

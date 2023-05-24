@@ -88,9 +88,11 @@ class WalletFragment : Fragment() {
         }
 
         binding.btnSendMoney.setOnClickListener {
-            binding.TransefeeringProgressBar.visibility = View.VISIBLE
-            binding.btnSendMoney.visibility = View.GONE
-
+//            binding.TransefeeringProgressBar.visibility = View.VISIBLE
+//            binding.btnSendMoney.visibility = View.GONE
+            binding.btnSendMoney.text = getString(R.string.processing)
+            binding.fundProcessingLoaderAnimator.visibility = View.VISIBLE
+            binding.fragmentWalletParentLayout.alpha = 0.5f
             transferFund()
         }
         binding.btnAddMoney.setOnClickListener {
@@ -102,8 +104,7 @@ class WalletFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // Check if there is a navigation from the payment fragment
-        if (findNavController().previousBackStackEntry?.destination?.id == R.id.consumerPreviewPaymentFragment) {
+        if (findNavController().previousBackStackEntry?.destination?.id == R.id.consumerPaymentFragment) {
             // Call the function to set the EditText fields
             handlePaymentFromCart()
         }
@@ -118,11 +119,12 @@ class WalletFragment : Fragment() {
         val userPhoneNumber = arguments?.getString("userPhoneNumber")
         val cartPriceInRupees = arguments?.getString("totalPriceRupees")
         //convert amount to wei
+        Log.d("testingtext", "handlePaymentFromCart: $amount $isFromCart $userName $userAddress $userPhoneNumber $cartPriceInRupees")
         val ethAmount = amount?.toDouble()
         cartAmountInWei = ethAmount?.times(1000000000000000000)?.toLong()
 
         binding.etPeerWalletAddress.requestFocus()
-        binding.etPeerWalletAddress.setText(contractAddress)
+        binding.etPeerWalletAddress.setText("0x0B3a6557AD46e877CeA3d7670AFB7D53211e6d63")
         binding.etPeerWalletAddress.isEnabled = false
         binding.etPeerBalanceSend.requestFocus()
         binding.etPeerBalanceSend.setText(amount)
@@ -165,16 +167,19 @@ class WalletFragment : Fragment() {
                         Toast.makeText(requireContext(), "Transaction Successful", Toast.LENGTH_SHORT).show()
                            binding.TransefeeringProgressBar.visibility = View.GONE
                             binding.btnSendMoney.visibility = View.VISIBLE
-                            if (isFromCart == true) {
-                                addPurchasedItemOnBlockChain()
-                                findNavController().navigate(R.id.action_walletFragment_to_confirmPaymentFragment)
-                            }
+//                            if (isFromCart == true) {
+//                                addPurchasedItemOnBlockChain()
+////                                findNavController().navigate(R.id.action_walletFragment_to_confirmPaymentFragment)
+//                            }
                     }
 
                     is WalletConnectViewModel.WalletConnectEvent.WalletTransactionError -> {
                         Toast.makeText(requireContext(), event.error, Toast.LENGTH_SHORT).show()
                         binding.TransefeeringProgressBar.visibility = View.GONE
                         binding.btnSendMoney.visibility = View.VISIBLE
+                        binding.btnSendMoney.text = getString(R.string.send_fund)
+                        binding.fundProcessingLoaderAnimator.visibility = View.GONE
+                        binding.fragmentWalletParentLayout.alpha = 1f
                     }
 
                     is WalletConnectViewModel.WalletConnectEvent.WalletTransactionException -> {
@@ -182,6 +187,9 @@ class WalletFragment : Fragment() {
                         Toast.makeText(requireContext(), "Something went wrong", Toast.LENGTH_SHORT).show()
                         binding.TransefeeringProgressBar.visibility = View.GONE
                         binding.btnSendMoney.visibility = View.VISIBLE
+                        binding.btnSendMoney.text = getString(R.string.send_fund)
+                        binding.fundProcessingLoaderAnimator.visibility = View.GONE
+                        binding.fragmentWalletParentLayout.alpha = 1f
                     }
                 }
             }
@@ -191,11 +199,13 @@ class WalletFragment : Fragment() {
     private fun addPurchasedItemOnBlockChain(){
         contractOperationViewModel.contractInstance.observe(requireActivity()){instance->
             cartAndPurchaseViewModel.getCartItems.observe(requireActivity()){ItemList->
-                val itemIds = ItemList.map { BigInteger(it._id) }
-                val productName = ItemList.map { it.productName }
-                val productQuantities = ItemList.map { BigInteger(it.quantity) }
-                val farmersContractAddresses = ItemList.map { it.contractAddress }
-                val prices = ItemList.map { BigInteger(it.price) }
+                Log.d("WalletConnectFragmentt", "addPurchasedItemOnBlockChain: ${ItemList.get(0).web3Id}")
+                //remove "" surroundings
+                val itemIds = ItemList.map { BigInteger(it.web3Id.removeSurrounding("\"")) }
+                val productName = ItemList.map { it.productName.removeSurrounding("\"") }
+                val productQuantities = ItemList.map { BigInteger(it.quantity.removeSurrounding("\"")) }
+                val farmersContractAddresses = ItemList.map { it.contractAddress.removeSurrounding("\"") }
+                val prices = ItemList.map { BigInteger(it.price.removeSurrounding("\"")) }
 
                 lifecycleScope.launch(Dispatchers.IO){
                     try {
@@ -204,7 +214,7 @@ class WalletFragment : Fragment() {
                             )?.send()
                         if(transactionReceipt?.isStatusOK!!){
                             withContext(Dispatchers.Main){
-                                addPurchasedItemOnServer()
+                                Log.d("WalletConnectFragmentt", "addPurchasedItemOnBlockChain: ${transactionReceipt.transactionHash}")
                                 findNavController().navigate(R.id.action_walletFragment_to_confirmPaymentFragment)
                                 Log.d("WalletConnectFragment", "addPurchasedItemOnBlockChain: ${transactionReceipt.transactionHash}")
                             }
@@ -220,12 +230,6 @@ class WalletFragment : Fragment() {
                 }
             }
         }
-    }
-    private fun addPurchasedItemOnServer() {
-        auth.currentUser?.phoneNumber?.substring(3)
-            ?.let { cartAndPurchaseViewModel.purchaseProductFromCart(it,
-                OrderProduct(userAddress!!, userName!!, userPhone!!, contractAddress!!,walletAddress,totalPriceRupees!!)
-            ) }
     }
     private fun updateUIOnWalletCreation() {
         binding.lottieAnimationWallet.visibility = View.GONE
@@ -310,6 +314,9 @@ class WalletFragment : Fragment() {
     private fun hideButtonAndStartProgressHide(){
         binding.btnSendMoney.visibility = View.VISIBLE
         binding.TransefeeringProgressBar.visibility = View.GONE
+        binding.btnSendMoney.text = getString(R.string.send_fund)
+        binding.fundProcessingLoaderAnimator.visibility = View.GONE
+        binding.fragmentWalletParentLayout.alpha = 1f
     }
     private fun depositFund() {
         val recipientAddress = walletAddress
@@ -339,12 +346,6 @@ class WalletFragment : Fragment() {
             msg,
             Snackbar.LENGTH_SHORT
         )
-
-        // Get the TextView from the Snackbar
-//        val snackbarTextView: TextView? = snackBar?.view?.findViewById(com.google.android.material.R.id.snackbar_text)
-//
-//        // Apply the custom style to the TextView
-//        snackbarTextView?.setTextAppearance(R.style.SnackbarText)
 
         snackBar.setTextColor(ContextCompat.getColor(requireContext(), R.color.primary_text_color))
         snackBar.setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.ErrorColor))

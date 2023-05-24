@@ -8,6 +8,7 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/fragment_wallet_parent_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
@@ -17,7 +18,7 @@
             android:id="@+id/lottieAnimationView"
             android:layout_width="wrap_content"
             android:layout_height="348dp"
-            android:visibility="visible"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent=".4"
             app:layout_constraintStart_toStartOf="parent"
@@ -27,6 +28,26 @@
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/wallet_animation"
             app:lottie_repeatCount="1" />
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/fund_processing_loader_animator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/guideline"
+            app:lottie_rawRes="@raw/loadinganimation"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            android:elevation="12dp"
+            android:visibility="gone"
+            />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent=".7"
+            />
+
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/ll_wallet_created"

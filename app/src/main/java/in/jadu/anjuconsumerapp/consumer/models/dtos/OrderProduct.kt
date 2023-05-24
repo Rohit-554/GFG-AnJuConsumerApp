@@ -7,4 +7,5 @@ data class OrderProduct(
     val contractAddress:String,
     val web3Id:String,
     val paymentAmount:String,
+    val status:String,
 )

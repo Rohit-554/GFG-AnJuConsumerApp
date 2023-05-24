@@ -87,6 +87,28 @@
     <string name="cart">Cart</string>
     <string name="profile">Profile\t\t</string>
     <string name="place_order">Place Order</string>
+    <string name="confirmDetails">Confirm Details</string>
+    <string name="processing">Processing Payment...</string>
+    <string name="in_process">Processing...</string>
+    <string name="retry">Retry</string>
+    <string name="add_address">Add Address</string>
+    <string name="product_details">Product Details</string>
+    <string name="seeding_date">Planting Date</string>
+    <string name="price_text">Price</string>
+    <string name="product_journey">Product Journey</string>
+    <string name="order_preview">Order Preview</string>
+    <string name="ready_to_ship">Ready To Ship</string>
+    <string name="status">Status</string>
+    <string name="logout">Logout</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="offers">Offers</string>
+    <string name="wishlist">WishList</string>
+    <string name="orders">Orders</string>
+    <string name="payment">Payment</string>
+    <string name="shipment_location">Shipment location :</string>
+    <string name="payment_status">Payment Status:</string>
+    <string name="in_transit">In Transit</string>
+    <string name="order_details">Order Details</string>
 
 
 </resources>

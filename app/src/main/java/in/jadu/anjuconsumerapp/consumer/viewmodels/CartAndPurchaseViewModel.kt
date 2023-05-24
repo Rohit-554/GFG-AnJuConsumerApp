@@ -1,15 +1,22 @@
 package `in`.jadu.anjuconsumerapp.consumer.viewmodels
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import `in`.jadu.anjuconsumerapp.consumer.models.dtos.CartTypeDtoItem
 import `in`.jadu.anjuconsumerapp.consumer.models.dtos.OrderProduct
+import `in`.jadu.anjuconsumerapp.consumer.models.dtos.ProductOrderDetails
 import `in`.jadu.anjuconsumerapp.consumer.models.repository.ConsumerRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -33,9 +40,14 @@ class CartAndPurchaseViewModel@Inject constructor(
     val getPurchasedItems: LiveData<List<CartTypeDtoItem>>
         get() = _getPurchasedItems
 
+    private val _getOrderedProducts = MutableLiveData<ProductOrderDetails>()
+    val getOrderedProducts: LiveData<ProductOrderDetails>
+        get() = _getOrderedProducts
+
 init {
     getCartItems(phoneNo)
-    getPurchasedItems(phoneNo)
+//    getPurchasedItems(phoneNo)
+    getOrderedProducts(phoneNo)
 }
 
     fun getCartItems(phoneNo: String) = viewModelScope.launch(Dispatchers.IO) {
@@ -60,7 +72,12 @@ init {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 consumerRepository.purchasedProductList(phoneNo,orderProduct)
+                Log.d("response", "purchaseProductFromCart: ${orderProduct}")
+                viewModelScope.launch {
+                    mainEventChannel.send(MainEvent.Success("Product Purchased Successfully"))
+                }
             } catch (e: Exception) {
+                Log.d("responseerror", "purchaseProductFromCart: ${e.message}")
                 viewModelScope.launch {
                     mainEventChannel.send(MainEvent.Error(e.message.toString()))
                 }
@@ -86,9 +103,21 @@ init {
         }
     }
 
-    fun orderProduct(phoneNo: String) = viewModelScope.launch(Dispatchers.IO) {
+    private fun getOrderedProducts(phoneNo: String) = viewModelScope.launch(Dispatchers.IO) {
         try {
-            consumerRepository.orderProduct(phoneNo)
+            val response = consumerRepository.orderProduct(phoneNo)
+            if(response.isSuccessful) {
+                Log.d("responsecart", "getOrderedProducts: ${response.body()}")
+                _getOrderedProducts.postValue(response.body())
+                viewModelScope.launch {
+                    mainEventChannel.send(MainEvent.Success("Order Placed Successfully"))
+                }
+            }else{
+                Log.d("responsecart", "getOrderedProducts: ${response.body()}")
+                viewModelScope.launch {
+                    mainEventChannel.send(MainEvent.Error("Order Placed Failed"))
+                }
+            }
         } catch (e: Exception) {
             Log.d("response", "orderProduct: ${e.message}")
             viewModelScope.launch {
@@ -96,7 +125,25 @@ init {
             }
         }
     }
+    fun getImageBitmap(context: Context, imgUrl: String, callback: (Bitmap?) -> Unit) {
+        Glide.with(context)
+            .asBitmap()
+            .load(imgUrl)
+            .into(object : CustomTarget<Bitmap>() {
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                    callback(resource)
+                }
 
+                override fun onLoadCleared(placeholder: Drawable?) {
+                    // Optional: handle when the resource is cleared
+                }
+            })
+    }
+    fun getImageLink(imgId: String): String {
+        val baseUrl = "https://firebasestorage.googleapis.com/v0/b/productserver-57d88.appspot.com/"
+        val imagePath = "o/$imgId?alt=media"
+        return baseUrl + imagePath
+    }
 
     sealed class MainEvent {
         data class Error(val error: String) : MainEvent()

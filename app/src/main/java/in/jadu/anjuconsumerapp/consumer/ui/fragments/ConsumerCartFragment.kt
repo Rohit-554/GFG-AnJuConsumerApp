@@ -39,7 +39,7 @@ class ConsumerCartFragment : Fragment() {
         cartAndPurchaseViewModel.getCartItems(auth.currentUser?.phoneNumber.toString().substring(3))
         cartAndPurchaseViewModel.getCartItems.observe(viewLifecycleOwner){
             if(it.isEmpty()){
-                Toast.makeText(requireContext(), "No Products Available Now", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "No Products Added", Toast.LENGTH_SHORT).show()
             }else{
                 Log.d("consumerCart", "onCreateView: $it")
                 adapter.itemTypes = it
